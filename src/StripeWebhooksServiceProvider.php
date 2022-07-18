@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\StripeWebhooks;
+namespace PascaleBeier\StripeWebhooks;
 
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
@@ -15,7 +15,7 @@ class StripeWebhooksServiceProvider extends PackageServiceProvider
             ->hasConfigFile();
 
         Route::macro('stripeWebhooks', function ($url) {
-            return Route::post($url, '\Spatie\StripeWebhooks\StripeWebhooksController');
+            return Route::post($url, '\PascaleBeier\StripeWebhooks\StripeWebhooksController');
         });
     }
 }

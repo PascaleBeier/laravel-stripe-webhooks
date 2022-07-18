@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\StripeWebhooks\Tests;
+namespace PascaleBeier\StripeWebhooks\Tests;
 
 use Illuminate\Support\Facades\Event;
-use Spatie\StripeWebhooks\ProcessStripeWebhookJob;
+use PascaleBeier\StripeWebhooks\ProcessStripeWebhookJob;
 use Spatie\WebhookClient\Models\WebhookCall;
 
 class StripeWebhookCallTest extends TestCase

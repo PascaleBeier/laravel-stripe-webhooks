@@ -5,3 +5,5 @@ vendor
 coverage.clover
 .php_cs.cache
 .php-cs-fixer.cache
+.idea
+.phpunit.result.cache

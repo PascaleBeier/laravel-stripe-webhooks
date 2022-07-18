@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\StripeWebhooks;
+namespace PascaleBeier\StripeWebhooks;
 
 use Exception;
 use Illuminate\Http\Request;

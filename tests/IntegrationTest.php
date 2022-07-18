@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\StripeWebhooks\Tests;
+namespace PascaleBeier\StripeWebhooks\Tests;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +22,7 @@ class IntegrationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_handle_a_valid_request()
+    public function it_can_handle_a_valid_request_and_use_the_service_locator()
     {
         $this->withoutExceptionHandling();
 

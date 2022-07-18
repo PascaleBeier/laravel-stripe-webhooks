@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\StripeWebhooks;
+namespace PascaleBeier\StripeWebhooks;
 
-use Spatie\StripeWebhooks\Exceptions\WebhookFailed;
+use PascaleBeier\StripeWebhooks\Exceptions\WebhookFailed;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
 
 class ProcessStripeWebhookJob extends ProcessWebhookJob
@@ -25,13 +25,13 @@ class ProcessStripeWebhookJob extends ProcessWebhookJob
             throw WebhookFailed::jobClassDoesNotExist($jobClass, $this->webhookCall);
         }
 
-        dispatch(new $jobClass($this->webhookCall));
+        dispatch(app($jobClass, ['webhookCall' => $this->webhookCall]));
     }
 
     protected function determineJobClass(string $eventType): string
     {
         $jobConfigKey = str_replace('.', '_', $eventType);
-        
+
         $defaultJob = config('stripe-webhooks.default_job', '');
 
         return config("stripe-webhooks.jobs.{$jobConfigKey}", $defaultJob);

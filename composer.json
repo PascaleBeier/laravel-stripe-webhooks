@@ -1,8 +1,8 @@
 {
-    "name": "spatie/laravel-stripe-webhooks",
+    "name": "pascalebeier/laravel-stripe-webhooks",
     "description": "Handle stripe webhooks in a Laravel application",
     "keywords": [
-        "spatie",
+        "pascalebeier",
         "laravel-stripe-webhooks"
     ],
     "homepage": "https://github.com/spatie/laravel-stripe-webhooks",
@@ -12,6 +12,11 @@
             "name": "Freek Van der Herten",
             "email": "freek@spatie.be",
             "homepage": "https://spatie.be",
+            "role": "Developer"
+        },
+        {
+            "name": "Pascale Beier",
+            "email": "mail@pascalebeier.de",
             "role": "Developer"
         }
     ],
@@ -29,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\StripeWebhooks\\": "src"
+            "PascaleBeier\\StripeWebhooks\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\StripeWebhooks\\Tests\\": "tests"
+            "PascaleBeier\\StripeWebhooks\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -46,7 +51,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\StripeWebhooks\\StripeWebhooksServiceProvider"
+                "PascaleBeier\\StripeWebhooks\\StripeWebhooksServiceProvider"
             ]
         }
     }

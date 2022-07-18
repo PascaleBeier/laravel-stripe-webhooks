@@ -1,12 +1,10 @@
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
 # Handle Stripe Webhooks in a Laravel application
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-stripe-webhooks.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-stripe-webhooks)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-stripe-webhooks/run-tests?label=tests)
-![Check & fix styling](https://github.com/spatie/laravel-stripe-webhooks/workflows/Check%20&%20fix%20styling/badge.svg)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-stripe-webhooks.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-stripe-webhooks)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/pascalebeier/laravel-stripe-webhooks.svg?style=flat-square)](https://packagist.org/packages/PascaleBeier/laravel-stripe-webhooks)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/pascalebeier/laravel-stripe-webhooks/run-tests?label=tests)
+[![Total Downloads](https://img.shields.io/packagist/dt/pascalebeier/laravel-stripe-webhooks.svg?style=flat-square)](https://packagist.org/packages/PascaleBeier/laravel-stripe-webhooks)
+
+> Fork of spatie/laravel-stripe-webhooks
 
 [Stripe](https://stripe.com) can notify your application of events using webhooks. This package can help you handle those webhooks. Out of the box it will verify the Stripe signature of all incoming requests. All valid calls will be logged to the database. You can easily define jobs or events that should be dispatched when specific events hit your app.
 
@@ -14,31 +12,21 @@ This package will not handle what should be done after the webhook request has b
 
 Before using this package we highly recommend reading [the entire documentation on webhooks over at Stripe](https://stripe.com/docs/webhooks).
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-stripe-webhooks.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-stripe-webhooks)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-### Upgrading
-
-Please see [UPGRADING](UPGRADING.md) for details.
+**This package is a fork of [spatie/laravel-stripe-webhooks](https://github.com/spatie/laravel-stripe-webhooks). See [CHANGELOG](./CHANGELOG.md) for all changes.**
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-stripe-webhooks
+composer require pascalebeier/laravel-stripe-webhooks
 ```
 
 The service provider will automatically register itself.
 
 You must publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Spatie\StripeWebhooks\StripeWebhooksServiceProvider"
+php artisan vendor:publish --provider="PascaleBeier\StripeWebhooks\StripeWebhooksServiceProvider"
 ```
 
 This is the contents of the config file that will be published at `config/stripe-webhooks.php`:
@@ -79,7 +67,7 @@ return [
     /**
      * This class determines if the webhook call should be stored and processed.
      */
-    'profile' => \Spatie\StripeWebhooks\StripeWebhookProfile::class,
+    'profile' => \PascaleBeier\StripeWebhooks\StripeWebhookProfile::class,
 
     /*
      * When disabled, the package will not verify if the signature is valid.
@@ -126,7 +114,7 @@ Unless something goes terribly wrong, this package will always respond with a `2
 Stripe might occasionally send a duplicate webhook request [more than once](https://stripe.com/docs/webhooks/best-practices#duplicate-events). This package makes sure that each request will only be processed once.
 All webhook requests with a valid signature will be logged in the `webhook_calls` table. The table has a `payload` column where the entire payload of the incoming webhook is saved.
 
-If the signature is not valid, the request will not be logged in the `webhook_calls` table but a `Spatie\StripeWebhooks\WebhookFailed` exception will be thrown.
+If the signature is not valid, the request will not be logged in the `webhook_calls` table but a `PascaleBeier\StripeWebhooks\WebhookFailed` exception will be thrown.
 If something goes wrong during the webhook request the thrown exception will be saved in the `exception` column. In that case the controller will send a `500` instead of `200`.
 
 There are two ways this package enables you to handle webhook requests: you can opt to queue a job or listen to the events the package will fire.
@@ -143,23 +131,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\WebhookClient\Models\WebhookCall;
+use Spatie\WebhookClient\Models\WebhookCall:
+use App\Actions\UpdatePaymentIntentAction;
 
-class HandleChargeableSource implements ShouldQueue
+class HandlePaymentIntentChange implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var \Spatie\WebhookClient\Models\WebhookCall */
-    public $webhookCall;
-
-    public function __construct(WebhookCall $webhookCall)
-    {
-        $this->webhookCall = $webhookCall;
-    }
+    public function __construct(private readonly WebhookCall $webhookCall, private readonly UpdatePaymentIntentAction $updatePaymentIntentAction)
 
     public function handle()
     {
         // do your work here
+        
+        $this->updatePaymentIntentAction->update($this->webhookCall->payload);
 
         // you can access the payload of the webhook call with `$this->webhookCall->payload`
     }
@@ -242,19 +227,19 @@ All incoming webhook requests are written to the database. This is incredibly va
 
 ```php
 use Spatie\WebhookClient\Models\WebhookCall;
-use Spatie\StripeWebhooks\ProcessStripeWebhookJob;
+use PascaleBeier\StripeWebhooks\ProcessStripeWebhookJob;
 
 dispatch(new ProcessStripeWebhookJob(WebhookCall::find($id)));
 ```
 
 ### Performing custom logic
 
-You can add some custom logic that should be executed before and/or after the scheduling of the queued job by using your own model. You can do this by specifying your own model in the `model` key of the `stripe-webhooks` config file. The class should extend `Spatie\StripeWebhooks\ProcessStripeWebhookJob`.
+You can add some custom logic that should be executed before and/or after the scheduling of the queued job by using your own model. You can do this by specifying your own model in the `model` key of the `stripe-webhooks` config file. The class should extend `PascaleBeier\StripeWebhooks\ProcessStripeWebhookJob`.
 
 Here's an example:
 
 ```php
-use Spatie\StripeWebhooks\ProcessStripeWebhookJob;
+use PascaleBeier\StripeWebhooks\ProcessStripeWebhookJob;
 
 class MyCustomStripeWebhookJob extends ProcessStripeWebhookJob
 {
@@ -302,7 +287,7 @@ Route::stripeWebhooks('webhook-url/{configKey}');
 Alternatively, if you are manually defining the route, you can add `configKey` like so:
 
 ```php
-Route::post('webhook-url/{configKey}', '\Spatie\StripeWebhooks\StripeWebhooksController');
+Route::post('webhook-url/{configKey}', '\PascaleBeier\StripeWebhooks\StripeWebhooksController');
 ```
 
 If this route parameter is present the verify middleware will look for the secret using a different config key, by appending the given the parameter value to the default config key. E.g. If Stripe posts to `webhook-url/my-named-secret` you'd add a new config named `signing_secret_my-named-secret`.
@@ -350,10 +335,6 @@ foreach ($stripeInvoice->lines as $invoiceLine) {
 }
 ```
 
-### About Cashier
-
-[Laravel Cashier](https://laravel.com/docs/5.5/billing#handling-stripe-webhooks) allows you to easily handle Stripe subscriptions. You may install it in the same application together with `laravel-stripe-webhooks`. There are no known conflicts.
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information about what has changed recently.
@@ -364,17 +345,14 @@ Please see [CHANGELOG](CHANGELOG.md) for more information about what has changed
 composer test
 ```
 
-## Contributing
-
-Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
-
 ## Security
 
-If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
+If you've found a bug regarding security please mail [mail@pascalebeier.de](mailto:mail@pascalebeier.de) instead of using the issue tracker.
 
 ## Credits
 
 - [Freek Van der Herten](https://github.com/freekmurze)
+- [Spatie](https://spatie.be)
 - [All Contributors](../../contributors)
 
 A big thank you to [Sebastiaan Luca](https://twitter.com/sebastiaanluca) who generously shared his Stripe webhook solution that inspired this package.

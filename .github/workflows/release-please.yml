@@ -1,0 +1,22 @@
+---
+name: release-please
+on:
+    workflow_run:
+        workflows: ["run-tests"]
+        branches: [main]
+        types:
+            - completed
+jobs:
+    release-please:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        runs-on: ubuntu-latest
+        outputs:
+            release_created: ${{ steps.release.outputs.release_created }}
+        steps:
+            - uses: google-github-actions/release-please-action@main
+              id: release
+              with:
+                  release-type: php
+                  package-name: laravel-stripe-webhooks
+                  command: manifest
+                  token: "${{ secrets.GAT }}"

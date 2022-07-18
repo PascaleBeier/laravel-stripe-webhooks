@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\StripeWebhooks\Exceptions;
+namespace PascaleBeier\StripeWebhooks\Exceptions;
 
 use Exception;
 use Spatie\WebhookClient\Models\WebhookCall;

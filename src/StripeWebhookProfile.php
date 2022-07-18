@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\StripeWebhooks;
+namespace PascaleBeier\StripeWebhooks;
 
 use Illuminate\Http\Request;
 use Spatie\WebhookClient\Models\WebhookCall;
