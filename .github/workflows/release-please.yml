@@ -16,7 +16,7 @@ jobs:
             - uses: google-github-actions/release-please-action@main
               id: release
               with:
-                  release-type: php
+                  release-type: simple
                   package-name: laravel-stripe-webhooks
                   command: manifest
                   token: "${{ secrets.GAT }}"
