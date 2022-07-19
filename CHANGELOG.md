@@ -2,6 +2,23 @@
 
 All notable changes to `laravel-stripe-webhooks` will be documented in this file
 
+## [3.3.0](https://github.com/PascaleBeier/laravel-stripe-webhooks/compare/3.2.0...v3.3.0) (2022-07-19)
+
+
+### Features
+
+* Use Container to create Job instance to allow dependency injection ([4e74d8a](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/4e74d8a2ed45f78db0bc918defb52c434c82de48))
+
+
+### Bug Fixes
+
+* **ci:** add composer.json version ([831be93](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/831be93bc49797a5a3654c8b6af50eb1a9dd092a))
+* **ci:** remove composer.json version ([a4bb5ea](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/a4bb5ea8b52ded592b08c776642b04e67edc9ef8))
+* **ci:** remove explicit manifest command ([d8d6ede](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/d8d6edeae8f6c090e77f903b760e7f583244d66b))
+* **ci:** Use main branch for php setup to include pint ([453038a](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/453038ac7fc677dca287ff2caa90b7bdc539da24))
+* **ci:** use release-please manifest ([455f851](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/455f851517722908bdeef259a049f9ee20b9460e))
+* **ci:** Use simple release-type since we do not version composer.json ([206dac4](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/206dac4105c605e2cfd247057bb0f19038636bf9))
+
 ## [3.2.0](https://github.com/spatie/laravel-stripe-webhooks/compare/3.1.3...3.2.0) - 2022-06-07
 
 ### What's Changed
