@@ -18,5 +18,4 @@ jobs:
               with:
                   release-type: simple
                   package-name: laravel-stripe-webhooks
-                  command: manifest
                   token: "${{ secrets.GAT }}"
