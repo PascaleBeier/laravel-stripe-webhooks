@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-stripe-webhooks` will be documented in this file
 
+## [3.4.0](https://github.com/PascaleBeier/laravel-stripe-webhooks/compare/v3.3.0...v3.4.0) (2022-08-28)
+
+
+### Features
+
+* Allow stripe sdk v9 ([0a5389f](https://github.com/PascaleBeier/laravel-stripe-webhooks/commit/0a5389f48bcad6bfc5a87077ac81b1b2e45c08df))
+
 ## [3.3.0](https://github.com/PascaleBeier/laravel-stripe-webhooks/compare/3.2.0...v3.3.0) (2022-07-19)
 
 
